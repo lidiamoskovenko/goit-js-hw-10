@@ -1,18 +1,12 @@
 import { fetchBreeds, fetchCatByBreed } from "./cat-api";
-import notiflix from "notiflix";
+import Notiflix from "notiflix";
 
 const breedSelect = document.querySelector(".breed-select");
 const catInfo = document.querySelector(".cat-info");
 const loader = document.querySelector(".loader");
 
 loader.hidden = true;
-
-catInfo.style.fontSize = "18px";
-catInfo.style.width = "1000px";
-catInfo.style.display = "flex";
-catInfo.style.gap = "30px";
-
-
+breedSelect.hidden = false;
 
 breedSelect.addEventListener('change', createCatsCard)
 
@@ -21,9 +15,8 @@ function searchBreeds() {
     .then((breeds) => {
         breedSelect.innerHTML = breeds
         .map((breed) => `<option value="${breed.id}">"${breed.name}"</option>`)
-        .join("");
-     ;
-    });
+        .join("");})        
+    .catch(ifError)
 }
 
 searchBreeds();
@@ -47,9 +40,11 @@ if(!loader.hidden){
         catInfo.style.display = "flex";
 
         })
-      .catch(error => {
-        Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!');
-      })};
+      .catch(ifError)};
 
-      
+     function ifError(){
+      loader.hidden = true;
+      breedSelect.hidden = true;
+      Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!');
+     } 
 
